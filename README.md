@@ -44,7 +44,7 @@
                             ▼
               ┌──────────────────────────┐
               │     云服务器              │
-              │  /root/shared-vault/     │
+              │  ~/shared-vault/         │
               │  (Git 仓库 + 笔记文件)   │
               └────────────┬─────────────┘
                            │ git push / pull (每5分钟)
@@ -393,8 +393,8 @@ crontab -l
 #### 第一段：确认 vault 存在
 
 ```
-请检查 /root/shared-vault/ 是否存在：
-ls -la /root/shared-vault/
+请检查 ~/shared-vault/ 是否存在：
+ls -la ~/shared-vault/
 ```
 
 > 如果不存在，说明阶段 3 的 clone 没成功，需要回去重做。
@@ -404,10 +404,10 @@ ls -la /root/shared-vault/
 ```
 请依次读取以下技能文件：
 
-cat /root/shared-vault/_skills/vault-sync.md
-cat /root/shared-vault/_skills/journal-manager.md
-cat /root/shared-vault/_skills/article-collector.md
-cat /root/shared-vault/_skills/knowledge-organizer.md
+cat ~/shared-vault/_skills/vault-sync.md
+cat ~/shared-vault/_skills/journal-manager.md
+cat ~/shared-vault/_skills/article-collector.md
+cat ~/shared-vault/_skills/knowledge-organizer.md
 
 读完后，把以下内容追加到你的 AGENTS.md 文件末尾：
 
@@ -415,27 +415,27 @@ cat /root/shared-vault/_skills/knowledge-organizer.md
 
 ## 共享 Vault 技能
 
-技能详情见 `/root/shared-vault/_skills/` 目录：
+技能详情见 `~/shared-vault/_skills/` 目录：
 
 ### vault-sync
 - 每次修改 vault 文件后，执行 git add + commit + push
-- 命令：`cd /root/shared-vault && git add -A && git diff --cached --quiet || git commit -m "auto: $(date '+%Y-%m-%d %H:%M') via agent-name" && git push origin main`
-- push 前先 pull：`cd /root/shared-vault && git pull --rebase origin main`
+- 命令：`cd ~/shared-vault && git add -A && git diff --cached --quiet || git commit -m "auto: $(date '+%Y-%m-%d %H:%M') via agent-name" && git push origin main`
+- push 前先 pull：`cd ~/shared-vault && git pull --rebase origin main`
 
 ### journal-manager
-- 管理 `/root/shared-vault/01_Journal/` 下的日志
+- 管理 `~/shared-vault/01_Journal/` 下的日志
 
 ### article-collector
-- 收藏文章到 `/root/shared-vault/00_Inbox/articles/`
+- 收藏文章到 `~/shared-vault/00_Inbox/articles/`
 
 ### knowledge-organizer
-- 整理文章到 `/root/shared-vault/02_Knowledge/`
+- 整理文章到 `~/shared-vault/02_Knowledge/`
 
 ## 关键规则
-1. 共享 vault 路径：`/root/shared-vault/`
+1. 共享 vault 路径：`~/shared-vault/`
 2. 每次操作 vault 后必须执行 vault-sync
 3. 删除只能软删除到 `05_Archive/`
-4. 新建笔记必须使用 `/root/shared-vault/_templates/` 下的模板
+4. 新建笔记必须使用 `~/shared-vault/_templates/` 下的模板
 ```
 
 > ⚠️ 把 `agent-name` 替换为当前 Agent 的实际名称（如 `work-a`、`work-b`、`personal`）。
@@ -446,7 +446,7 @@ cat /root/shared-vault/_skills/knowledge-organizer.md
 请在你的 USER.md 中追加以下信息：
 
 ## Obsidian Vault
-- 共享 vault 路径：/root/shared-vault/
+- 共享 vault 路径：~/shared-vault/
 - GitHub 仓库：git@github.com:你的用户名/shared-vault.git
 - 同步方式：Git 自动同步（服务器 cron 每5分钟，Obsidian Git 插件每5分钟）
 ```
@@ -533,7 +533,7 @@ chmod 600 ~/.ssh/config
 
 ### Q: Agent 说找不到 vault 目录？
 
-1. 确认服务器上 `/root/shared-vault/` 或 `~/shared-vault/` 存在
+1. 确认服务器上 `~/shared-vault/` 存在
 2. Agent 平台的终端可能用不同用户，执行 `whoami` 和 `echo $HOME` 确认路径
 
 ### Q: Git 冲突了怎么办？
@@ -561,6 +561,16 @@ git push origin main
 
 ---
 
+## 贡献
+
+欢迎提 Issue 和 PR！如果你有新的 Agent 技能或目录结构改进方案，非常欢迎分享。
+
+1. Fork 本仓库
+2. 创建分支 `git checkout -b feature/你的改进`
+3. 提交 PR
+
+---
+
 ## 致谢
 
 本项目灵感来自对「AI 是否能成为真正的第二大脑」的探索。感谢：
@@ -570,6 +580,12 @@ git push origin main
 
 ---
 
+## 觉得有用？
+
+如果这个项目对你有帮助，请点个 ⭐ Star 支持一下！也欢迎分享给朋友。
+
+---
+
 ## License
 
-MIT License — 随意使用、修改、分享。
+[MIT License](LICENSE) — 随意使用、修改、分享。
