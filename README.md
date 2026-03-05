@@ -120,14 +120,18 @@ shared-vault/
 | Obsidian | 笔记软件，[下载地址](https://obsidian.md) | 免费 |
 | AI Agent 平台 | OpenClaw / Coze / 其他支持终端操作的 Agent 平台 | 视平台定价 |
 | Git（Windows） | 版本控制工具，[下载地址](https://git-scm.com) | 免费 |
+| Git（Mac） | macOS 自带，或通过 Xcode Command Line Tools 安装 | 免费 |
 
 ---
 
 ## 完整教程
 
-### 阶段 1：Windows 本机配置 SSH Key
+### 阶段 1：本机配置 SSH Key
 
 > SSH Key 是你电脑和 GitHub 之间的"钥匙"，有了它才能推送代码。
+> 下面分 **Windows** 和 **Mac** 两套步骤，选你的系统操作即可。
+
+#### Windows 用户
 
 **1.1 检查是否已安装 Git**
 
@@ -178,6 +182,57 @@ ssh -T git@github.com
 
 看到 `Hi xxx! You've successfully authenticated` 就成功了。
 
+#### Mac 用户
+
+**1.1 检查是否已安装 Git**
+
+打开 **终端**（Terminal，可在"启动台"搜索"终端"或按 `Cmd+Space` 搜索 `Terminal`），输入：
+
+```bash
+git --version
+```
+
+如果弹出提示安装 Xcode Command Line Tools，点 **安装** 等待完成即可。如果显示版本号说明已安装。
+
+**1.2 配置 Git 用户信息**
+
+```bash
+git config --global user.name "你的GitHub用户名"
+git config --global user.email "你的邮箱"
+```
+
+**1.3 生成 SSH Key**
+
+```bash
+ssh-keygen -t ed25519 -C "你的邮箱"
+```
+
+连按 3 次回车（使用默认路径，不设密码）。
+
+**1.4 复制公钥到剪贴板**
+
+```bash
+pbcopy < ~/.ssh/id_ed25519.pub
+```
+
+> `pbcopy` 是 Mac 自带的命令，会直接复制到剪贴板，无需手动选择。
+
+**1.5 添加到 GitHub**
+
+1. 打开 https://github.com/settings/keys
+2. 点 **New SSH Key**
+3. Title 填 `Mac`
+4. Key 直接 `Cmd+V` 粘贴
+5. 点 **Add SSH key**
+
+**1.6 验证连接**
+
+```bash
+ssh -T git@github.com
+```
+
+看到 `Hi xxx! You've successfully authenticated` 就成功了。
+
 ---
 
 ### 阶段 2：创建 GitHub 仓库并推送 Vault
@@ -192,24 +247,38 @@ ssh -T git@github.com
 
 **2.2 克隆本项目的模板**
 
+**Windows（PowerShell）：**
+
 ```powershell
-# 进入你想存放的位置（比如用户目录）
 cd ~
 
-# 克隆模板仓库
 git clone https://github.com/amebapu/mycenter.git shared-vault-temp
 
-# 复制 vault 模板到正式目录
 Copy-Item -Recurse shared-vault-temp/vault-template/* shared-vault/
 Copy-Item shared-vault-temp/vault-template/.gitignore shared-vault/
 
-# 删除临时目录
 Remove-Item -Recurse -Force shared-vault-temp
+```
+
+**Mac（Terminal）：**
+
+```bash
+cd ~
+
+git clone https://github.com/amebapu/mycenter.git shared-vault-temp
+
+mkdir -p shared-vault
+cp -R shared-vault-temp/vault-template/* shared-vault/
+cp shared-vault-temp/vault-template/.gitignore shared-vault/
+
+rm -rf shared-vault-temp
 ```
 
 **2.3 初始化并推送**
 
-```powershell
+**Windows / Mac 通用：**
+
+```bash
 cd ~/shared-vault
 git init
 git add -A
@@ -351,7 +420,9 @@ crontab -l
 
 1. 打开 Obsidian
 2. 点「打开本地仓库」（Open folder as vault）
-3. 选择 `C:\Users\你的用户名\shared-vault` 文件夹
+3. 选择 vault 文件夹：
+   - **Windows**：`C:\Users\你的用户名\shared-vault`
+   - **Mac**：`/Users/你的用户名/shared-vault`
 4. 点「打开」
 
 **4.2 安装 Git 插件**
